@@ -29,7 +29,7 @@ def check_ammo(url):
             divs = parent.getElementsByTagName('div')
             price_div = divs[1]
             ammo_price = price_div.childNodes[0].nodeValue.strip()
-            if price_div.childNodes[1].nodeName == 'span':
+            if len(price_div.childNodes) > 1 and price_div.childNodes[1].nodeName == 'span':
                 ammo_price = ammo_price + ' (' + price_div.childNodes[1].childNodes[0].nodeValue.strip() + ')'
                 pass
 
