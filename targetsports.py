@@ -15,6 +15,7 @@ def check_ammo(url):
         page = response.read()
         reo = re.compile('(<br>|<img[^>]*>)')
         page = '<?xml version="1.0"?>\n<root>\n' + reo.sub('', page.decode('utf8')) + '\n</root>\n'
+        page = page.replace("&", "&amp;")
         doc = parseString(page)
         pass
 
