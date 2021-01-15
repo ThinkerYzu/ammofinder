@@ -16,7 +16,13 @@ def check_ammo(url):
         reo = re.compile('(<br>|<img[^>]*>)')
         page = '<?xml version="1.0"?>\n<root>\n' + reo.sub('', page.decode('utf8')) + '\n</root>\n'
         page = page.replace("&", "&amp;")
-        doc = parseString(page)
+        try:
+            doc = parseString(page)
+        except e:
+            print(e)
+            print(f'Page {url}')
+            print(page)
+            raise 'Fail to parse'
         pass
 
     avail_ammos = []
