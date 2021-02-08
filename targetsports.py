@@ -1,6 +1,7 @@
 import urllib.request
 import re
 from xml.dom.minidom import parseString
+from xml.parsers.expat import ExpatError
 
 urls = {
     '22lr': 'https://www.targetsportsusa.com/ISearch.aspx?PageNumber=0&PageSize=40&PageSort=pv.PricePerRound&ColorFilter=&SizeFilter=&PriceFilter=&TypeFilter=&ManufacturerFilter=&CategoryFilter=202&GenreFilter=&DistributorFilter=&VectorFilter=&SectionFilter=&LibraryFilter=&stockFilter=false&Filter=%',
@@ -13,12 +14,15 @@ TO_FIND_CLASS = 'add-to-cart'
 def check_ammo(url):
     with urllib.request.urlopen(url) as response:
         page = response.read()
+        if page.split(b'\n')[0].startswith(b'<!DOCTYPE '):
+            page = '\n'.join(page.split('\n')[1:])
+            pass
         reo = re.compile('(<br>|<img[^>]*>)')
         page = '<?xml version="1.0"?>\n<root>\n' + reo.sub('', page.decode('utf8')) + '\n</root>\n'
         page = page.replace("&", "&amp;")
         try:
             doc = parseString(page)
-        except e:
+        except ExpatError as e:
             print(e)
             print(f'Page {url}')
             print(page)
