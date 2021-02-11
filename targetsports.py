@@ -14,10 +14,7 @@ TO_FIND_CLASS = 'add-to-cart'
 def check_ammo(url):
     with urllib.request.urlopen(url) as response:
         page = response.read()
-        if page.split(b'\n')[0].startswith(b'<!DOCTYPE '):
-            page = '\n'.join(page.split('\n')[1:])
-            pass
-        reo = re.compile('(<br>|<img[^>]*>)')
+        reo = re.compile('(<br>|<img[^>]*>|<!DOCTYPE [^>]*>)')
         page = '<?xml version="1.0"?>\n<root>\n' + reo.sub('', page.decode('utf8')) + '\n</root>\n'
         page = page.replace("&", "&amp;")
         try:
